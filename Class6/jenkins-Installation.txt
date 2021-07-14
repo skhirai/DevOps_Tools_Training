@@ -1,0 +1,44 @@
+yum install epel-release  java-1.8.0-openjdk-devel vim wget ntp git -y
+systemctl stop firewalld;systemctl disable firewalld
+ntpdate pool.ntp.org
+wget https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+tar xvf apache-maven-3.5.4-bin.tar.gz
+mv apache-maven-3.5.4  /usr/local/apache-maven
+ 
+vim ~/.bash_profile
+
+In this file
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export JRE_HOME=/usr/lib/jvm/java-1.8.0/jre
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$JRE_HOME/bin
+export M2_HOME=/usr/local/apache-maven
+export M2=$M2_HOME/bin 
+export PATH=$M2:$PATH
+
+source ~/.bash_profile
+
+mvn -version
+
+
+
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+
+rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+yum install jenkins -y
+
+systemctl restart jenkins;systemctl enable jenkins;systemctl status jenkins
+
+The following plugins needs to be installed
+
+dashboard view
+Build Pipeline
+Deploy to container
+Email Extension Template
+
+[root@master java-1.8.0]# cat /var/lib/jenkins/secrets/initialAdminPassword
+9da04e163934413fbb5128977ec567bb
+
+
+
+http://192.168.122.31:8080/
