@@ -12,6 +12,7 @@ Step 4: Configure Jenkins Key
 Step 5: Install Jenkins
 Step 6: start the Jenkins Service Persistantly
 Step 7: Install the necessary plugins
+Step 8: Global Tools Settings - In Jenkins Console - JAVA , MAVEN, GIT
 *******************************************************************************************************************
 Step 1 : Install pre-requisite software packages
 
@@ -84,3 +85,5 @@ dashboard view
 Build Pipeline
 Deploy to container
 Email Extension Template
+*******************************************************************************************************************
+Step 8: Global Tools Settings - In Jenkins Console - JAVA , MAVEN, GIT
