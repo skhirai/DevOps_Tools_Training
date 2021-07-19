@@ -60,9 +60,12 @@ if this command is not working ,reboot the server and try this command again
 Step 4: Goto Jenkins console and install docker plugin
 
 CloudBees Docker Build and Publish
+CloudBees Docker Custom Build Environment Plugin
 Docker Pipeline
 Docker
 docker-build-step
+Docker plugin
+
 
 *******************************************************************************************************************
 
