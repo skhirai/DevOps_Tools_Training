@@ -2,132 +2,94 @@ To start this handson lab,you need following resources.
 
 1. Google cloud (or any other cloud or some VM's from your local machine).
 2. Jenkins VM should have 2 CPU / 4 GB memory / 40 gb Disk. Install Jenkins in CentOS 7 OS machine.
-3. Class 6 and Class 7 must be completed and ready
+3. Class 6  must be completed and ready (jenkins server installation,plugins installation,environment variables configuration,one test java application war file build should be successful)
 4. Make sure you have root access or root login credentials.
-5. For this Tomcat and Artifactory VM you must have 2 CPU and minimum 7.5 GB memory.Create this VM with CentOS 7
-
-*******************************************************************************************************************
-Step 1 : Install pre-requisite software packages
-Step 2 : Configure environment variables
-Step 3: Configure Artifactory and TOMCAT Software Repository
-Step 4: Install Artifcatory
-Step 5: Change Java Heap Size
-Step 6: Install TOMCAT Web Application server
-Step 7: Configure Web Application Server process Minimum Memory and Maximum Memory
-Step 8: Configure Tomcat user settings
-Step 9: Restart Tomcat and Artifactory Services
-Step 10: Incase if you want to change tomcat port number
-Step 11: Create new pipeline and enable manual deployment to deploy application in tomcat web application server
-Step 12: Create new pipeline and enable auto deployment to deploy application in tomcat web application server
 
 
 *******************************************************************************************************************
+Step 1 : Install Docker in jenkins Server
+Step 2 : Add Jenkins User into Docker group
+Step 3:  make sure docker info command is working in jenkins user login
+Step 4: Goto Jenkins console and install docker plugin
+Step 5: Test the sample application build
+Step 6: verify the dockerfile
+Step 7: create new docker repository in hub.docker.com
+Step 8: Configure docker credentials and docker repository in new pipeline
+Step 9: Trigger pipeline build
+Step 10: verify the build is sucessfull and also verify the hub.docker.com commit is showing.
 
-Artifactory
+*******************************************************************************************************************
 
-Step 1 : Install pre-requisite software packages
+Step 1 : Install Docker in jenkins Server
 
-yum install epel-release  java-1.8.0-openjdk-devel vim wget ntp git -y
-systemctl stop firewalld;systemctl disable firewalld
-ntpdate pool.ntp.org
-wget https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
-tar xvf apache-maven-3.5.4-bin.tar.gz
-mv apache-maven-3.5.4  /usr/local/apache-maven
+Docker Installation in CentOS
+
+sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+
+sudo yum install docker-ce docker-ce-cli containerd.io
+
+sudo systemctl start docker
+
+sudo systemctl enable docker
+
+
 
 *******************************************************************************************************************
 
-Step 2 : Configure environment variables
+Step 2 : Add Jenkins User into Docker group
 
-vim ~/.bash_profile
+sudo gpasswd -a jenkins docker
 
-In this file
 
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0
-export JRE_HOME=/usr/lib/jvm/java-1.8.0/jre
-PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$JRE_HOME/bin
-export M2_HOME=/usr/local/apache-maven
-export M2=$M2_HOME/bin 
-export PATH=$M2:$PATH
+Step 3:  make sure docker info command is working in jenkins user login
 
-source ~/.bash_profile
+su - -s /bin/bash jenkins
 
-mvn -version
+docker info
+
+if this command is not working ,reboot the server and try this command again
 
 *******************************************************************************************************************
-Step 3: Configure Artifactory and TOMCAT Software Repository
+Step 4: Goto Jenkins console and install docker plugin
 
-just refernece - https://www.jfrog.com/confluence/display/RTF/Installing+Artifactory
-
-
-just refernece - https://www.jfrog.com/confluence/display/RTF/Installing+on+Linux+Solaris+or+Mac+OS#InstallingonLinuxSolarisorMacOS-ServiceInstallation
-
-
-wget https://bintray.com/jfrog/artifactory-rpms/rpm -O /etc/yum.repos.d/bintray-jfrog-artifactory-rpms.repo
-*******************************************************************************************************************
-
-Step 4: Install Artifcatory
-
-yum install jfrog-artifactory-oss
+CloudBees Docker Build and Publish
+Docker Pipeline
+Docker
+docker-build-step
 
 *******************************************************************************************************************
-Step 5: Change Java Heap Size
 
+Step 5: Test the sample application build
 
-vim /opt/jfrog/artifactory/app/bin/artifactory.default --> Just for reference
+https://github.com/cloudnloud/docker-jenkins-integration-sample
 
-change heap size to 512mb --> if you want play in testing this also just for reference
+create jenkins freestyle project
+
+In add build steps --> select Invoke top-level Maven Targets --> select Maven Version --> Goals (type install)
+
+trigger now and ensure build is fine.
+*******************************************************************************************************************
+Step 6: verify the dockerfile
+
+https://github.com/cloudnloud/docker-jenkins-integration-sample/blob/main/Dockerfile
 
 *******************************************************************************************************************
-Step 6: Install TOMCAT Web Application server
+Step 7: create new docker repository in hub.docker.com
 
-artifactory is webapps which deployed over tomcat
-
-yum install tomcat-webapps tomcat-admin-webapps -y
+neew repo - docker-jenkins-integration-sample
 
 *******************************************************************************************************************
-Step 7: Configure Web Application Server process Minimum Memory and Maximum Memory
+Step 8: Configure docker credentials and docker repository in new pipeline
 
-
-vim /usr/share/tomcat/conf/tomcat.conf
-JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
+Registry credentials
 
 *******************************************************************************************************************
-Step 8: Configure Tomcat user settings
-
-
-vim /usr/share/tomcat/conf/tomcat-users.xml
-
-<role rolename="admin"/>
-<role rolename="admin-gui"/>
-<role rolename="admin-script"/>
-<role rolename="manager"/>
-<role rolename="manager-gui"/>
-<role rolename="manager-script"/>
-<role rolename="manager-jmx"/>
-<role rolename="manager-status"/>
-<user username="admin" password="adminadmin" roles="admin,manager,admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status" />
-
-*******************************************************************************************************************
-Step 9: Restart Tomcat and Artifactory Services
-
-
-systemctl restart artifactory;systemctl enable artifactory;systemctl enable tomcat;systemctl restart tomcat
-
-http://192.168.122.32:8080/
-
-http://192.168.149.22:8081/artifactory/
-
-*******************************************************************************************************************
-Step 10: Incase if you want to change tomcat port number
-
-
-vi /usr/share/tomcat/conf/server.xml --> port change in tomcat
-
-
-in artifactory console
-
-http://35.232.21.100:8081/artifactory/list/libs-snapshot-local/com/wakaleo/gameoflife/gameoflife-web/1.0-SNAPSHOT/gameoflife-web-1.0-20190923.100047-1.war
-
-*******************************************************************************************************************
-Step 11: Create new pipeline and enable manual deployment to deploy application in tomcat web application server
-Step 12: Create new pipeline and enable auto deployment to deploy application in tomcat web application server
+Step 9: Trigger pipeline build
+Step 10: verify the build is sucessfull and also verify the hub.docker.com commit is showing.
