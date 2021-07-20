@@ -20,118 +20,136 @@ refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
 *******************************************************************************************************************
 Step 1 : Create user in 2nd linux machine (docker machine)
 Step 2 : Exchange SSH keys
-Step 3:  Test from jenkins server to linux machine login access without any password
-Step 4: publish over ssh jenkins plugin installation in jenkins console
-Step 5: integrate Linux machine into jenkins console under
-Step 6: create new pipeline and execute just application build
-Step 7: Create new pipeline and start new container from jenkins pipeline itself.
+Step 3: publish over ssh jenkins plugin installation in jenkins console
+Step 4: integrate Linux machine into jenkins console under
+Step 5: create new pipeline and execute just application build
+Step 6: Create new pipeline and start new container from jenkins pipeline itself.
 
 *******************************************************************************************************************
 
 
-Step 1 : Install pre-requisite software packages
+Step 1 : Create user in 2nd linux machine (docker machine)
 
-yum install epel-release  java-1.8.0-openjdk-devel vim wget ntp git -y
-systemctl stop firewalld;systemctl disable firewalld
-ntpdate pool.ntp.org
-wget https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
-tar xvf apache-maven-3.5.4-bin.tar.gz
-mv apache-maven-3.5.4  /usr/local/apache-maven
+yum install wget -y
+
+useradd -d /var/lib/jenkins jenkins
+
+cat /etc/passwd | grep -i jenkins
+
+passwd jenkins
+
+yum install git -y
+
+sudo gpasswd -a jenkins docker
+
+*******************************************************************************************************************
+
+Step 2 : Exchange SSH keys
+
+if you are using cloud machines then first ensure direct ssh is enabled or not ?
+
+in both linux machines go to /etc/ssh/sshd_config file
+enable the following line
+
+PasswordAuthentication yes
+
+disable following line
+
+PasswordAuthentication no
+
+save this file
+
+run the below command
+
+systemctl restart sshd
+
+
+
+Now go to jenkins machine and login as an jenkins user
+
+su - -s /bin/bash jenkins
+ssh-keygen
+cat /var/lib/jenkins/.ssh/id_rsa.pub
+
+now from jenkins machine try to copy the ssh keys to 2nd linux machine
+
+ssh-copy-id docker
+
+noet : docker is 2nd linux machine name
+
+after ssh keys are copied try to ssh login from jenkins machine.If you are able to login without password then you are good to go.
+
+ssh docker (from jenkins machine)
+
+
+*******************************************************************************************************************
+Step 3: publish over ssh jenkins plugin installation in jenkins console
+
 
 *******************************************************************************************************************
 
-Step 2 : Configure environment variables
+Step 4: integrate Linux machine into jenkins console under
 
-vim ~/.bash_profile
+got to jenkins console --> go to system configuration --> goto Publish over SSH section
 
-In this file
+SSH Servers
 
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0
-export JRE_HOME=/usr/lib/jvm/java-1.8.0/jre
-PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$JRE_HOME/bin
-export M2_HOME=/usr/local/apache-maven
-export M2=$M2_HOME/bin 
-export PATH=$M2:$PATH
-
-source ~/.bash_profile
-
-mvn -version
+name - docker-machine
+remote directory - /var/lib/jenkins
 
 *******************************************************************************************************************
-Step 3: Configure Artifactory and TOMCAT Software Repository
+Step 5: create new pipeline and execute just application build
 
-just refernece - https://www.jfrog.com/confluence/display/RTF/Installing+Artifactory
-
-
-just refernece - https://www.jfrog.com/confluence/display/RTF/Installing+on+Linux+Solaris+or+Mac+OS#InstallingonLinuxSolarisorMacOS-ServiceInstallation
-
-
-wget https://bintray.com/jfrog/artifactory-rpms/rpm -O /etc/yum.repos.d/bintray-jfrog-artifactory-rpms.repo
-*******************************************************************************************************************
-
-Step 4: Install Artifcatory
-
-yum install jfrog-artifactory-oss
 
 *******************************************************************************************************************
-Step 5: Change Java Heap Size
+Step 6: Create new pipeline and start new container from jenkins pipeline itself.
+
+in post build actions under --> Send Build artifacts Over SSH -->
+
+soure files --> gameoflife-web/target/*.war
+Remove prefix --> gameoflife-web/target/
+
+if we give the above the in Jenkins home directory under /var/lib/Jenkins/ folder the war file will be saved in docker machine.
+
+Jenkins server name is jenkins
+
+Go to server 2 machine and create dockerfile like below
+
+[jenkins@docker ~]$ cat Dockerfile 
+FROM tomcat:latest
+MAINTAINER vijayabalan has created this container based tomcat
+MAINTAINER artifacts will be copied from jenkins build server
+MAINTAINER Then war file will be deployed into tomcat which is running on container
+COPY ./gameoflife.war /usr/local/tomcat/webapps/
 
 
-vim /opt/jfrog/artifactory/app/bin/artifactory.default --> Just for reference
-
-change heap size to 512mb --> if you want play in testing this also just for reference
-
-*******************************************************************************************************************
-Step 6: Install TOMCAT Web Application server
-
-artifactory is webapps which deployed over tomcat
-
-yum install tomcat-webapps tomcat-admin-webapps -y
-
-*******************************************************************************************************************
-Step 7: Configure Web Application Server process Minimum Memory and Maximum Memory
 
 
-vim /usr/share/tomcat/conf/tomcat.conf
-JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
-
-*******************************************************************************************************************
-Step 8: Configure Tomcat user settings
+cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class12/Dockerfile;sleep 30s;docker build -t devops-image .;docker run --name devops-container -p 8080:8080 devops-image;
 
 
-vim /usr/share/tomcat/conf/tomcat-users.xml
+test the application
 
-<role rolename="admin"/>
-<role rolename="admin-gui"/>
-<role rolename="admin-script"/>
-<role rolename="manager"/>
-<role rolename="manager-gui"/>
-<role rolename="manager-script"/>
-<role rolename="manager-jmx"/>
-<role rolename="manager-status"/>
-<user username="admin" password="adminadmin" roles="admin,manager,admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status" />
+
+http://34.121.70.194:8080/gameoflife/
+
+docker machine ip address is - 34.121.70.194
 
 *******************************************************************************************************************
-Step 9: Restart Tomcat and Artifactory Services
+Practice more time ?
 
 
-systemctl restart artifactory;systemctl enable artifactory;systemctl enable tomcat;systemctl restart tomcat
+now delete all images.
+**********************
+To stop any running container
 
-http://192.168.122.32:8080/
+docker stop $(docker ps -q)  
 
-http://192.168.149.22:8081/artifactory/
+********************
+To remove all the containers
 
-*******************************************************************************************************************
-Step 10: Incase if you want to change tomcat port number
-
-
-vi /usr/share/tomcat/conf/server.xml --> port change in tomcat
+docker rm $(docker ps -a -q)
 
 
-in artifactory console
+docker rmi $(docker images -a -q)
 
-http://35.232.21.100:8081/artifactory/list/libs-snapshot-local/com/wakaleo/gameoflife/gameoflife-web/1.0-SNAPSHOT/gameoflife-web-1.0-20190923.100047-1.war
-
-*******************************************************************************************************************
-Step 11: Create new pipeline and enable manual deployment to deploy application in tomcat web application server
-Step 12: Create new pipeline and enable auto deployment to deploy application in tomcat web application server
