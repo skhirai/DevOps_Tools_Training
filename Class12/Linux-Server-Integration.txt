@@ -4,26 +4,30 @@ To start this handson lab,you need following resources.
 2. Jenkins VM should have 2 CPU / 4 GB memory / 40 gb Disk. Install Jenkins in CentOS 7 OS machine.
 3. Class 6 and Class 7 must be completed and ready
 4. Make sure you have root access or root login credentials.
-5. For this Tomcat and Artifactory VM you must have 2 CPU and minimum 7.5 GB memory.Create this VM with CentOS 7
-
-*******************************************************************************************************************
-Step 1 : Install pre-requisite software packages
-Step 2 : Configure environment variables
-Step 3: Configure Artifactory and TOMCAT Software Repository
-Step 4: Install Artifcatory
-Step 5: Change Java Heap Size
-Step 6: Install TOMCAT Web Application server
-Step 7: Configure Web Application Server process Minimum Memory and Maximum Memory
-Step 8: Configure Tomcat user settings
-Step 9: Restart Tomcat and Artifactory Services
-Step 10: Incase if you want to change tomcat port number
-Step 11: Create new pipeline and enable manual deployment to deploy application in tomcat web application server
-Step 12: Create new pipeline and enable auto deployment to deploy application in tomcat web application server
+5. Install docker in another linux (CENTOS 7) machine
 
 
 *******************************************************************************************************************
+prerequisites
+Step 1 : Install Docker in centos 7
 
-Artifactory
+refer --> https://github.com/cloudnloud/Docker-Training/blob/main/Class3-Docker-Installation/installation
+
+Step 2: Install and configure jenkins in centos 7 machine
+
+refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
+
+*******************************************************************************************************************
+Step 1 : Create user in 2nd linux machine (docker machine)
+Step 2 : Exchange SSH keys
+Step 3:  Test from jenkins server to linux machine login access without any password
+Step 4: publish over ssh jenkins plugin installation in jenkins console
+Step 5: integrate Linux machine into jenkins console under
+Step 6: create new pipeline and execute just application build
+Step 7: Create new pipeline and start new container from jenkins pipeline itself.
+
+*******************************************************************************************************************
+
 
 Step 1 : Install pre-requisite software packages
 
