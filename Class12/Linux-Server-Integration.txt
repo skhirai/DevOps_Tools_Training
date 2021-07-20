@@ -125,7 +125,7 @@ COPY ./gameoflife.war /usr/local/tomcat/webapps/
 
 
 
-cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class12/Dockerfile;sleep 30s;docker build -t devops-image .;docker run --name devops-container -p 8080:8080 devops-image;
+cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class12/Dockerfile;sleep 30s;docker build -t devops-image .;sleep 30s;docker run -d --name devops-container -p 8080:8080 devops-image;
 
 
 test the application
