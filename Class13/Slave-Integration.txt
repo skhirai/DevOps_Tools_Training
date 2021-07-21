@@ -92,7 +92,7 @@ cat /var/lib/jenkins/.ssh/id_rsa.pub
 
 now from jenkins machine try to copy the ssh keys to 2nd linux machine
 
-ssh-copy-id docker
+ssh-copy-id slave1
 
 noet : slave1 is 2nd linux machine name
 
