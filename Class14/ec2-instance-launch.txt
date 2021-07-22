@@ -1,0 +1,127 @@
+To start this handson lab,you need following resources.
+
+1. Google cloud (or any other cloud or some VM's from your local machine).
+2. Jenkins VM should have 2 CPU / 4 GB memory / 40 gb Disk. Install Jenkins in CentOS 7 OS machine.You cana say this is Jenkins master.
+3. As part of Class 6 and Class 7 ,complete all steps in jenkins master server and ready
+4. Make sure you have root access or root login credentials.
+5. Create 2nd Centos 7 Linux Machine for Jenkins Slave purpose.
+
+
+*******************************************************************************************************************
+prerequisites
+Step 1 : Install and Configure Jenkins master in centos 7
+
+refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
+
+*******************************************************************************************************************
+Step 1 : Create user in 2nd linux machine (Jenkins Slave machine)
+Step 2 : Install and prepare Slave machine
+Step 3 : Exchange SSH keys
+Step 4:  Add Slave node in Jenkins Master Admin console
+Step 5:  Test the Slave machine
+Step 6: create new pipeline and test it
+
+
+*******************************************************************************************************************
+
+
+Step 1 : Create user in 2nd linux machine (Jenkins Slave machine)
+
+yum install wget git -y
+
+useradd -d /var/lib/jenkins jenkins
+
+cat /etc/passwd | grep -i jenkins
+
+passwd jenkins
+
+*******************************************************************************************************************
+
+Step 2 : Install and prepare Slave machine
+
+yum install epel-release  java-1.8.0-openjdk-devel vim wget ntp git -y
+systemctl stop firewalld;systemctl disable firewalld
+ntpdate pool.ntp.org
+wget https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+tar xvf apache-maven-3.5.4-bin.tar.gz
+mv apache-maven-3.5.4  /usr/local/apache-maven
+
+Configure environment variables in slave machine
+
+vim /etc/profile
+
+In this file
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export JRE_HOME=/usr/lib/jvm/java-1.8.0/jre
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$JRE_HOME/bin
+export M2_HOME=/usr/local/apache-maven
+export M2=$M2_HOME/bin 
+export PATH=$M2:$PATH
+
+source /etc/profile
+
+*******************************************************************************************************************
+
+Step 3 : Exchange SSH keys
+
+if you are using cloud machines then first ensure direct ssh is enabled or not ?
+
+in both linux machines go to /etc/ssh/sshd_config file
+enable the following line
+
+PasswordAuthentication yes
+
+disable following line
+
+PasswordAuthentication no
+
+save this file
+
+run the below command
+
+systemctl restart sshd
+
+
+
+Now go to jenkins machine and login as an jenkins user
+
+su - -s /bin/bash jenkins
+ssh-keygen
+cat /var/lib/jenkins/.ssh/id_rsa.pub
+
+now from jenkins machine try to copy the ssh keys to 2nd linux machine
+
+ssh-copy-id docker
+
+noet : slave1 is 2nd linux machine name
+
+after ssh keys are copied try to ssh login from jenkins machine.If you are able to login without password then you are good to go.
+
+ssh slave1 (from jenkins machine)
+
+
+*******************************************************************************************************************
+Step 4:  Add Slave node in Jenkins Master Admin console
+
+su - -s /bin/bash jenkins
+wget http://34.133.90.251:8080/jnlpJars/agent.jar
+
+now agent.jar will be placed in home directory
+goto manage jenkins --> Manage Nodes --> Add Nodes
+
+Remote root directory - /var/lib/jenkins/
+Launch method - Launch Agent via execution of command on the master
+Launch Command - ssh slave1 java -jar ~/agent.jar
+
+*******************************************************************************************************************
+Step 5:  Test the Slave machine
+
+
+
+*******************************************************************************************************************
+Step 6: create new pipeline and test it
+
+https://github.com/cloudnloud/maven_demo
+
+
