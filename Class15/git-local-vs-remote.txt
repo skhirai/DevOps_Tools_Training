@@ -23,7 +23,7 @@ cd safebox
 touch flex.txt
 git add *
 git config --global  user.name 'developer1'
-$git config --global user.email 'developer1@cloudnloud.com'
+git config --global user.email 'developer1@cloudnloud.com'
 git status
 git commit -m "you fail multiple times and then keep smash it"
 git push
@@ -37,7 +37,7 @@ yum install git -y
 useradd developer2
 passwd developer2
 su - developer2
-git clone developer1@pserver:/usr/opt/git1/safebox (please if you are using google cloud please use some user name rather root id)
+git clone developer1@server1:/usr/opt/git1/safebox (please if you are using google cloud please use some user name rather root id.)
 cd safebox
 git pull
 
@@ -51,7 +51,7 @@ git clone /usr/opt/git1/safebox
 cd safebox
 cp /var/tmp/flex.txt .
 git config --global  user.name 'vijay'
-git config --global user.email 'vijay@test.com'
+git config --global user.email 'vijay@cloudnloud.com'
 git config --global default.push simple
 git add package.pp
 git commit -m "dont sleep till you smash"
