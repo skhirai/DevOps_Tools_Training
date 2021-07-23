@@ -1,0 +1,44 @@
+To start this handson lab,you need following resources.
+
+1. Google cloud (or any other cloud or some VM's from your local machine).
+2. Jenkins VM should have 2 CPU / 4 GB memory / 40 gb Disk. Install Jenkins in CentOS 7 OS machine.You cana say this is Jenkins master.
+3. As part of Class 6 and Class 7 ,complete all steps in jenkins master server and ready
+4. Make sure you have root access or root login credentials.
+5. Make sure you have activated aws.amazon.com account
+
+
+
+*******************************************************************************************************************
+prerequisites
+Step 1 : Install and Configure Jenkins master in centos 7
+
+refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
+
+*******************************************************************************************************************
+Step 1 : Install EC2 jenkins plugin in jenkins
+Step 2 : Create IAM keys from your aws.amazon.com account
+Step 3 : Configure AWS cloud in jenkins console and test the integration
+Step 4:  Install AWS cli in jenkins server
+Step 5:  Create pipeline and launch EC2-instances
+
+*******************************************************************************************************************
+
+
+Step 4:  Install AWS cli in jenkins server
+
+yum install awscli -y
+
+su - -s /bin/bash jenkins
+
+aws configure
+
+*******************************************************************************************************************
+
+Step 5:  Create pipeline and launch EC2-instances
+
+#!/bin/bash
+/bin/aws ec2 run-instances --image-id ami-09e67e426f25ce0d7
+
+
+#!/bin/bash
+/bin/aws ec2 run-instances --image-id ami-09e67e426f25ce0d7 --region us-east-1 --count 1 --instance-type t2.micro --key-name jenkins --security-group-ids sg-0032455ab196cc694 --subnet-id subnet-953cb79b
