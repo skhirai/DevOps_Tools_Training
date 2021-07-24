@@ -49,3 +49,15 @@ Besides JUnit and Jest, which testing frameworks would you like to use?
 NA
 
 Click --> Generate on GitHub
+
+*******************************************************************************************************************
+
+Now go to jenkins console and create new pipelinne with 
+
+https://github.com/cloudnloud/jhipster-sample-application
+
+click build now -->
+
+Access the appliction
+
+
