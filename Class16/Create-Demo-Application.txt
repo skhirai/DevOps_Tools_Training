@@ -9,10 +9,39 @@ Step 1 : Install and Configure Jenkins master in centos 7
 
 refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
 
-*******************************************************************************************************************
-https://start.jhipster.tech/#/
+yum install epel-release   vim wget ntp git java-11-openjdk java-11-openjdk-devel -y
 
-create sample application
+systemctl stop firewalld;systemctl disable firewalld
+ntpdate pool.ntp.org
+wget https://archive.apache.org/dist/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz
+tar xvf apache-maven-3.8.1-bin.tar.gz
+mv apache-maven-3.8.1  /usr/local/apache-maven
+
+*******************************************************************************************************************
+Step 2 : Configure environment variables
+
+vim ~/.bash_profile
+
+In this file
+
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+export JRE_HOME=/usr/lib/jvm/jre-11-openjdk
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$JRE_HOME/bin
+export M2_HOME=/usr/local/apache-maven/apache-maven-3.8.1
+export M2=$M2_HOME/bin 
+export PATH=$M2:$PATH
+
+source ~/.bash_profile
+
+java-home - /usr/lib/jvm/java-11-openjdk/bin
+jre-home - /usr/lib/jvm/jre-11-openjdk/bin
+
+/usr/sbin/alternatives --config java
+
+*******************************************************************************************************************
+Step 3: Create sample application
+
+https://start.jhipster.tech/#/
 
 Select the Git provider: GitHub
 Application name - jhipsterSampleApplication
@@ -51,6 +80,7 @@ NA
 Click --> Generate on GitHub
 
 *******************************************************************************************************************
+Step 4: Build and Deploy using Jenkins Pipeline
 
 Now go to jenkins console and create new pipelinne with 
 
