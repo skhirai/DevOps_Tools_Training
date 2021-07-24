@@ -33,6 +33,8 @@ export PATH=$M2:$PATH
 
 source ~/.bash_profile
 
+Rest of the steps are same --- https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
+
 java-home - /usr/lib/jvm/java-11-openjdk/bin
 jre-home - /usr/lib/jvm/jre-11-openjdk/bin
 
