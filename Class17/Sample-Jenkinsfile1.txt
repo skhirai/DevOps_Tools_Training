@@ -1,0 +1,63 @@
+To start this handson lab,you need following resources.
+
+1. Google cloud (or any other cloud or some VM's from your local machine).
+2. 1 linux machine - linux machine should have CENTOS7 - 1 CPU/512 MB Memory
+
+*******************************************************************************************************************
+prerequisites
+Step 1 : Install and Configure Jenkins master in centos 7
+
+refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
+
+*******************************************************************************************************************
+https://start.jhipster.tech/#/
+
+create sample application
+
+Select the Git provider: GitHub
+Application name - jhipsterSampleApplication
+Repository name - jhipster-sample-application
+Application type:
+
+Which type of application would you like to create? - Microservice Application
+Server side options - 
+
+What is your default Java package name? - com.mycompany.myapp
+On which port would like your server to run? It should be unique to avoid port conflicts. -- 8082
+Do you want to use the JHipster Registry to configure, monitor and scale your application? - No
+Which type of authentication would you like to use? - JWT Authentication (Stateless, with a token)
+Which type of database would you like to use? - No
+Which production database would you like to use? - No
+Which development database would you like to use? - No
+Do you want to use the Spring cache abstraction? - No
+Would you like to use Maven or Gradle for building the backend? - Maven
+
+
+Which other technologies would you like to use? - N/A
+
+Internationalization options 
+
+Would you like to enable internationalization support? Yes
+Please choose the native language of the application - English
+Please choose additional languages to install - English
+
+
+Testing options
+
+Besides JUnit and Jest, which testing frameworks would you like to use?
+
+NA
+
+Click --> Generate on GitHub
+
+*******************************************************************************************************************
+
+Now go to jenkins console and create new pipelinne with 
+
+https://github.com/cloudnloud/jhipster-sample-application
+
+click build now -->
+
+Access the appliction
+
+
