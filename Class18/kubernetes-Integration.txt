@@ -150,6 +150,7 @@ cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_To
 
 watch -n 1 kubectl get all -n facebook -o wide
 
+
 test the application
 
 
