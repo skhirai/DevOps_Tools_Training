@@ -10,7 +10,7 @@ To start this handson lab,you need following resources.
 prerequisites
 Step 1 : Install kubernetes in Ubuntu 18.04 LTS (1 master and 1 worker node)
 
-refer --> https://github.com/cloudnloud/Docker-Training/blob/main/Class3-Docker-Installation/installation
+refer --> https://github.com/cloudnloud/Kubernetes_Admin_Training/blob/main/class3-k8s-installation/installation.txt
 
 Step 2: Install and configure jenkins in centos 7 machine
 
