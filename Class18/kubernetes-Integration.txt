@@ -93,7 +93,7 @@ cat /var/lib/jenkins/.ssh/id_rsa.pub
 
 now from jenkins machine try to copy the ssh keys to 2nd linux machine
 
-ssh-copy-id docker
+ssh-copy-id master
 
 noet : master is kubenetes master machine
 
