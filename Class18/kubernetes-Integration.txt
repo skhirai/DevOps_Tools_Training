@@ -9,7 +9,7 @@ To start this handson lab,you need following resources.
 
 *******************************************************************************************************************
 prerequisites
-Step 1 : Install Docker in centos 7
+Step 1 : Install kubernetes in ubuntu 18.0 LTS (1 master and 1 worker node)
 
 refer --> https://github.com/cloudnloud/Docker-Training/blob/main/Class3-Docker-Installation/installation
 
@@ -18,29 +18,45 @@ Step 2: Install and configure jenkins in centos 7 machine
 refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
 
 *******************************************************************************************************************
-Step 1 : Create user in 2nd linux machine (docker machine)
+Step 1 : Create user in kubernetes master machine
 Step 2 : Exchange SSH keys
-Step 3: publish over ssh jenkins plugin installation in jenkins console
-Step 4: integrate Linux machine into jenkins console under
-Step 5: create new pipeline and execute just application build
-Step 6: Create new pipeline and start new container from jenkins pipeline itself.
+Step 3:  publish over ssh jenkins plugin installation in jenkins console
+Step 4:  integrate kubernetes environment into jenkins console under
+Step 5:  Create new pipeline and execute just application build
+Step 6:  Create new pipeline and achieve the following
+          1. Download the raw java code from github
+          2. compile and build and create war file
+          3. move the application package war file to kubernetes master
+          4. create docker custom image and deploy this created application war file.
+          5. Push the created deployed application custm docker image to hub.docker.com
+          6. Now deploy the newly created image to kubernetes cluster.
+          7. test the newly created game application
 
 *******************************************************************************************************************
 
+Step 1 : Create user in kubernetes master machine
 
-Step 1 : Create user in 2nd linux machine (docker machine)
+apt install wget git  -y
 
-yum install wget -y
-
-useradd -d /var/lib/jenkins jenkins
+adduser --home /var/lib/jenkins jenkins
 
 cat /etc/passwd | grep -i jenkins
 
 passwd jenkins
 
-yum install git -y
-
 sudo gpasswd -a jenkins docker
+reboot
+
+docker info command from jenkins user login should work.
+
+su - -s /bin/bash jenkins
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+
+from jenkins user make sure the following commands are working
+
+kubectl get nodes
 
 *******************************************************************************************************************
 
@@ -75,11 +91,15 @@ now from jenkins machine try to copy the ssh keys to 2nd linux machine
 
 ssh-copy-id docker
 
-noet : docker is 2nd linux machine name
+noet : master is kubenetes master machine
 
 after ssh keys are copied try to ssh login from jenkins machine.If you are able to login without password then you are good to go.
 
-ssh docker (from jenkins machine)
+ssh master (from jenkins machine)
+
+Also run the following command from jenkins machine as an jenkins user
+
+docker login
 
 
 *******************************************************************************************************************
@@ -94,7 +114,7 @@ got to jenkins console --> go to system configuration --> goto Publish over SSH 
 
 SSH Servers
 
-name - docker-machine
+name - kuber-machine
 remote directory - /var/lib/jenkins
 
 *******************************************************************************************************************
@@ -113,7 +133,9 @@ if we give the above the in Jenkins home directory under /var/lib/Jenkins/ folde
 
 Jenkins server name is jenkins
 
-Go to server 2 machine and create dockerfile like below
+Go to kubernetes master machine and create dockerfile like below or use directly the dockerfile github link
+
+https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/Dockerfile
 
 [jenkins@docker ~]$ cat Dockerfile 
 FROM tomcat:latest
@@ -125,15 +147,16 @@ COPY ./gameoflife.war /usr/local/tomcat/webapps/
 
 
 
-cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class12/Dockerfile;sleep 30s;docker build -t devops-image .;sleep 30s;docker run -d --name devops-container -p 8080:8080 devops-image;
+cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/Dockerfile;sleep 30s;docker build -t cloudnloud/game:v1.0 .;sleep 30s;docker push cloudnloud/game:v1.0;kubectl apply -f https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/game.yaml
 
+watch -n 1 kubectl get all -n facebook -o wide
 
 test the application
 
 
-http://34.121.70.194:8080/gameoflife/
+http://35.224.137.76:32001/gameoflife/
 
-docker machine ip address is - 34.121.70.194
+Kubernetes machine ip address is - 35.224.137.76
 
 *******************************************************************************************************************
 Practice more time ?
@@ -152,3 +175,6 @@ docker rm $(docker ps -a -q)
 
 
 docker rmi $(docker images -a -q)
+
+
+
