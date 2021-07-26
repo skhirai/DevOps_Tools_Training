@@ -48,9 +48,14 @@ reboot
 
 docker info command from jenkins user login should work.
 
+cp /etc/kubernetes/admin.conf /var/tmp
+chmod 777 /var/tmp/admin.conf
+
 su - -s /bin/bash jenkins
+
+
 mkdir -p $HOME/.kube
-cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+cp -i /var/tmp/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 
 from jenkins user make sure the following commands are working
