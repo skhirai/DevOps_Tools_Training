@@ -4,8 +4,7 @@ To start this handson lab,you need following resources.
 2. Jenkins VM should have 2 CPU / 4 GB memory / 40 gb Disk. Install Jenkins in CentOS 7 OS machine.
 3. Class 6 and Class 7 must be completed and ready
 4. Make sure you have root access or root login credentials.
-5. Install docker in another linux (CENTOS 7) machine
-
+5. Install K8s master and 1 worker node 
 
 *******************************************************************************************************************
 prerequisites
