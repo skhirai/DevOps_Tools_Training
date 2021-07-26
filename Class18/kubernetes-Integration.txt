@@ -119,7 +119,7 @@ remote directory - /var/lib/jenkins
 *******************************************************************************************************************
 Step 5: create new pipeline and execute just application build
 
-
+https://github.com/cloudnloud/maven_demo
 *******************************************************************************************************************
 Step 6: Create new pipeline and start new container from jenkins pipeline itself.
 
