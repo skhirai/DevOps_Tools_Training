@@ -151,7 +151,7 @@ COPY ./gameoflife.war /usr/local/tomcat/webapps/
 
 
 
-cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/Dockerfile;sleep 30s;docker build -t cloudnloud/game:v1.0 .;sleep 30s;docker push cloudnloud/game:v1.0;kubectl apply -f https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/game.yaml
+cd /var/lib/jenkins/;wget https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/Dockerfile;sleep 30s;docker build -t cloudnloud/game:v1.0 .;sleep 30s;docker push cloudnloud/game:v1.0;sleep 30s;kubectl apply -f https://raw.githubusercontent.com/cloudnloud/Devops_Tools_Training/main/Class18/game.yaml
 
 watch -n 1 kubectl get all -n facebook -o wide
 
