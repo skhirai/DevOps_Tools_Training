@@ -36,6 +36,25 @@ passwd jenkins
 *******************************************************************************************************************
 Step 2 : Exchange SSH keys
 
+
+if you are using cloud machines then first ensure direct ssh is enabled or not ?
+
+in both linux machines go to /etc/ssh/sshd_config file
+enable the following line
+
+PasswordAuthentication yes
+
+disable following line
+
+PasswordAuthentication no
+
+save this file
+
+run the below command
+
+systemctl restart sshd
+
+
 in jenkins machine
 
 su - -s /bin/bash jenkins
