@@ -1,3 +1,28 @@
+To start this handson lab,you need following resources.
+
+1. Google cloud (or any other cloud or some VM's from your local machine).
+2. Jenkins VM should have 2 CPU / 4 GB memory / 40 gb Disk. Install Jenkins in CentOS 7 OS machine.
+3. Class 6 and Class 7 must be completed and ready
+4. Make sure you have root access or root login credentials.
+5. Create one more linux CentOs7 machine and we are going to use this machine as an ansible client
+
+*******************************************************************************************************************
+prerequisites
+Step 1: Install and configure jenkins in centos 7 machine
+
+refer --> https://github.com/cloudnloud/Devops_Tools_Training/tree/main/Class6
+
+*******************************************************************************************************************
+Step 1 : Create user in node1 ansible client linux machine
+Step 2 : Exchange SSH keys
+Step 3:  Install and Configure ansible in jenkins machine
+Step 4:  In both jenkins machine and Ansible client node1 machine - enable jenkins user as an sudo access without password
+Step 5:  Test from Jenkins server - Ansible ad-hoc command working or not ?
+Step 6: Now create pipeline and test the ansible ad-hoc commands
+
+*******************************************************************************************************************
+Step 1 : Create user in node1 ansible client linux machine
+
 In node1 machine
 
 yum install wget git  -y
@@ -8,6 +33,8 @@ cat /etc/passwd | grep -i jenkins
 
 passwd jenkins
 
+*******************************************************************************************************************
+Step 2 : Exchange SSH keys
 
 in jenkins machine
 
@@ -15,10 +42,13 @@ su - -s /bin/bash jenkins
 ssh-keygen
 cat /var/lib/jenkins/.ssh/id_rsa.pub
 
-now from jenkins machine try to copy the ssh keys to 2nd linux machine
+now from jenkins machine try to copy the ssh keys to 2nd linux machine ansible client node1
 
 ssh-copy-id node1
+*******************************************************************************************************************
+Step 3:  Install and Configure ansible in jenkins machine
 
+yum install https://mirror.sjtu.edu.cn/fedora/epel/7/x86_64/Packages/a/ansible-2.9.23-1.el7.noarch.rpm
 
 in jenkins machine as an root user
 
@@ -40,6 +70,10 @@ node1
 
 ansible all --list
 
+*******************************************************************************************************************
+
+Step 4:  In both jenkins machine and Ansible client node1 machine - enable jenkins user as an sudo access without password
+
 In both machines (jenkins machine now also acting as an ansible machine and node1 which is ansible client)
 
 visudo
@@ -53,19 +87,13 @@ su - -s /bin/bash jenkins
 
 ansible all --list
 
+ansible all -m ping
 
-yum install https://mirror.sjtu.edu.cn/fedora/epel/7/x86_64/Packages/a/ansible-2.9.23-1.el7.noarch.rpm
+this command output should come as green ping/pong
 
-[defaults]
-inventory=/etc/ansible/hosts
-remote_user=jenkins
-[privilege_escalation]
-become=True
-become_method=sudo
-become_user=root
-become_ask_pass=False
+*******************************************************************************************************************
 
-
+Step 5:  Test from Jenkins server - Ansible ad-hoc command working or not ?
 
 Go to jenkins server cli prompt.Then run the following ansible ad-hoc command to make sure it is working
 
@@ -73,6 +101,13 @@ ansible all -m yum -a "name=httpd state=latest"
 
 ansible all -m yum -a "name=httpd state=absent"
 
+in paralel go to node1 machine and run below command to ensure httpd package is there or not ?
+
+yum list httpd
+
+*******************************************************************************************************************
+
+Step 6: Now create pipeline and test the ansible ad-hoc commands
 
 Host pattern --> node1
 File or host list --> /etc/ansible/hosts
