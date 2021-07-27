@@ -1,0 +1,82 @@
+In node1 machine
+
+yum install wget git  -y
+
+useradd -d /var/lib/jenkins jenkins
+
+cat /etc/passwd | grep -i jenkins
+
+passwd jenkins
+
+
+in jenkins machine
+
+su - -s /bin/bash jenkins
+ssh-keygen
+cat /var/lib/jenkins/.ssh/id_rsa.pub
+
+now from jenkins machine try to copy the ssh keys to 2nd linux machine
+
+ssh-copy-id node1
+
+
+in jenkins machine as an root user
+
+/etc/ansible/ansible.cfg
+
+
+inventory      = /etc/ansible/hosts
+
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+
+
+vim /etc/ansible/hosts
+
+node1
+
+ansible all --list
+
+In both machines (jenkins machine now also acting as an ansible machine and node1 which is ansible client)
+
+visudo
+
+jenkins ALL=(ALL)       NOPASSWD: ALL
+
+
+in jenkins machine login as an jenkins user 
+
+su - -s /bin/bash jenkins
+
+ansible all --list
+
+
+yum install https://mirror.sjtu.edu.cn/fedora/epel/7/x86_64/Packages/a/ansible-2.9.23-1.el7.noarch.rpm
+
+[defaults]
+inventory=/etc/ansible/hosts
+remote_user=jenkins
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+
+
+
+Go to jenkins server cli prompt.Then run the following ansible ad-hoc command to make sure it is working
+
+ansible all -m yum -a "name=httpd state=latest"
+
+ansible all -m yum -a "name=httpd state=absent"
+
+
+Host pattern --> node1
+File or host list --> /etc/ansible/hosts
+Module --> yum
+Module arguments or command to execute --> name=httpd state=latest
+
+
