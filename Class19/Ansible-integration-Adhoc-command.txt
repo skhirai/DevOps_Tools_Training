@@ -70,6 +70,10 @@ node1
 
 ansible all --list
 
+Also install jenkins plugin called ansible in jenkins console
+
+also set the ansible binary path
+
 *******************************************************************************************************************
 
 Step 4:  In both jenkins machine and Ansible client node1 machine - enable jenkins user as an sudo access without password
