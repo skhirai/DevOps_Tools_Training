@@ -1,0 +1,4 @@
+---
+- hosts: node1
+  tasks:
+    - debug: msg="{{ lookup('env','BUILD_TAG') }}"
