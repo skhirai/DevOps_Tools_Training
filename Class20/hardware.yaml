@@ -1,0 +1,17 @@
+---
+- name: check the cpu's and install the necessary packages
+  hosts: node1
+  tasks:
+   - name: check 2 cpu's are there or not ?
+     debug:
+      msg: "yes.this machine {{ ansible_nodename }} is having 2 cpu's"
+     when: ansible_processor_vcpus == 2
+     register: hardware
+   - name: print jason message
+     debug:
+      var: hardware
+   - name: install httpd all 2 cpu's servers
+     yum:
+      name: httpd
+      state: latest
+     when: ansible_processor_vcpus == 2
