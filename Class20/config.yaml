@@ -1,0 +1,8 @@
+---
+- name: i am going to check all my servers
+  hosts: all
+  tasks:
+   - name: print serverswhich are running REDHAT OS Family
+     debug:
+      msg: "this {{ ansible_nodename }} is running REDHAT OS Family"
+     when: ansible_os_family != "RedHat"
