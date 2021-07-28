@@ -17,8 +17,7 @@ Step 1 : Create user in node1 ansible client linux machine
 Step 2 : Exchange SSH keys
 Step 3:  Install and Configure ansible in jenkins machine
 Step 4:  In both jenkins machine and Ansible client node1 machine - enable jenkins user as an sudo access without password
-Step 5:  Test from Jenkins server - Ansible ad-hoc command working or not ?
-Step 6: Now create pipeline and test the ansible ad-hoc commands
+Step 5: Now create pipeline and test the ansible playbooks
 
 *******************************************************************************************************************
 Step 1 : Create user in node1 ansible client linux machine
@@ -116,25 +115,13 @@ this command output should come as green ping/pong
 
 *******************************************************************************************************************
 
-Step 5:  Test from Jenkins server - Ansible ad-hoc command working or not ?
+Step 5: Now create pipeline and test the playbooks
 
-Go to jenkins server cli prompt.Then run the following ansible ad-hoc command to make sure it is working
+keep all the playbooks in SCM - github
 
-ansible all -m yum -a "name=httpd state=latest"
+Repository URL --> https://github.com/cloudnloud/Devops_Tools_Training
 
-ansible all -m yum -a "name=httpd state=absent"
-
-in paralel go to node1 machine and run below command to ensure httpd package is there or not ?
-
-yum list httpd
-
-*******************************************************************************************************************
-
-Step 6: Now create pipeline and test the ansible ad-hoc commands
-
-Host pattern --> node1
-File or host list --> /etc/ansible/hosts
-Module --> yum
-Module arguments or command to execute --> name=httpd state=latest
+Playbook path --> Class20/patch.yaml
+Playbook path --> Class20/hardware.yaml
 
 
